@@ -2,16 +2,25 @@ package main
 
 import (
 	"fmt"
-	"os"
+	"strings"
+
+	"github.com/atotto/clipboard"
 )
 
 func main() {
-	if len(os.Args) < 2 {
-		fmt.Println("Please provide a string")
+	text, err := clipboard.ReadAll()
+	if err != nil {
+		fmt.Println("Error reading from clipboard:", err)
 		return
 	}
 
-	input := os.Args[1]
+	result := strings.Replace(text, "\n", "", -1)
 
-	fmt.Printf("You entered %v string\n", input)
+	err = clipboard.WriteAll(result)
+
+	if err != nil {
+		fmt.Println("Error copying to clipboard:", err)
+	} else {
+		fmt.Println("Text copied to clipboard!")
+	}
 }
